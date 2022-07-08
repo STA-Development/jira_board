@@ -10,8 +10,8 @@ const SearchSvg = () => {
       viewBox="0 0 487.95 487.95"
       xmlSpace="preserve"
       fill="white"
-      width="25px"
-      height="25px"
+      width="20px"
+      height="20px"
     >
       <path
         d="M481.8,453l-140-140.1c27.6-33.1,44.2-75.4,44.2-121.6C386,85.9,299.5,0.2,193.1,0.2S0,86,0,191.4s86.5,191.1,192.9,191.1

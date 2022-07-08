@@ -1,8 +1,7 @@
 .Page {
     display : grid;
     grid-auto-flow: column;
-    margin-left: 50px;
-    grid-template-columns: 25%;
+    grid-template-columns: 17%;
     grid-gap:3%;
 }
 
@@ -15,7 +14,7 @@
     grid-auto-flow: column;
     grid-template-columns: 20% 20%  ;
     grid-gap: 25px;
-    margin-top: 50px;
+    
 
 }
 .bar {
@@ -26,11 +25,10 @@
     gap:10px;
     grid-auto-flow: column;
     grid-gap: 15px;
-    margin-top: 150px;
     justify-content: right;
     grid-template-columns: 30% 30% 30% ;
-    height: 77vh;
-    margin-right: 5%;
+    height: 100vh;
+    
 }
 .child {
     padding-left: 20px;
@@ -76,12 +74,88 @@
     grid-auto-flow: column;  
    
 }
-.IconsPr {
-display:flex;
-justify-content: center;
-}
-.IconsPr2 {
+.IconsPr{
     display:flex;
-    
-    /*align-items:flex-end;*/
+    flex-direction:column;
+    align-items: center;
     }
+
+    .Icons1 {
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap:10px;
+      }
+    .Icons2 {
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap:10px;
+        position: relative;
+        top:70vh;
+        
+    }
+ 
+   .ReactLogo{
+    padding-top: 20%;
+   }
+
+.MoveText{
+    padding-top: 8px;
+}
+.EditLogos {
+   display: grid;
+  grid-template-rows:80px 50px 50px 50px 100px ;
+  grid-gap:5px;
+  grid-auto-flow: row;
+  align-items: center;
+   
+  
+}
+.EditLogo{
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+    align-items: center;
+  
+
+}
+.EditLogo2{
+    display: flex;
+    flex-direction: row;
+    align-items: center;  
+    gap: 10px;
+}
+.Board {
+    font-size: 22px;
+    padding: 10px;
+   
+
+ 
+}
+.EditLogo3{
+     display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+.EditLogo4{
+    display: flex;
+   flex-direction: row;
+   align-items: center;
+   gap: 10px;
+}
+.EditLogo5{
+    display: flex;
+   flex-direction: row;
+   align-items: center;
+   gap: 10px;
+}
+.FeedBack{
+    white-space: nowrap;
+}
+.JiraLogo{
+    white-space: nowrap;
+}

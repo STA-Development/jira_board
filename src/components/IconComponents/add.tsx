@@ -1,4 +1,4 @@
-const SearchSvg = () => {
+const AddSvg = () => {
   return (
     <svg
       version="1.1"
@@ -10,8 +10,8 @@ const SearchSvg = () => {
       viewBox="0 0 44 44"
       xmlSpace="preserve"
       fill="white"
-      width="25px"
-      height="25px"
+      width="20px"
+      height="20px"
     >
       <path
         d="M22,44c-3.309,0-6-2.665-6-5.941V28H5.941C2.665,28,0,25.309,0,22s2.665-6,5.941-6H16V5.941C16,2.665,18.691,0,22,0
@@ -22,4 +22,4 @@ const SearchSvg = () => {
     </svg>
   );
 };
-export default SearchSvg;
+export default AddSvg;
