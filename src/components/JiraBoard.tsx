@@ -33,14 +33,19 @@ const style = {
 export default function JiraBoard() {
   const [IsAdd, setIsAdd] = useState(false);
   const [newItem, setNewItem] = useState("");
+  const [itemDescription, setItemDescription] = useState("");
   const [items, setItems] = useState<any[]>([]);
+  const [data, setData] = useState({});
+  const [description, setDescription] = useState(false);
 
   const addItem = () => {
     const item = {
       id: Math.floor(Math.random() * 1000),
-      value: newItem,
+      title: newItem,
+      description: itemDescription,
     };
     setItems((oldList) => [...oldList, item]);
+
     setNewItem("");
     console.log(items);
   };
@@ -105,7 +110,32 @@ export default function JiraBoard() {
           <div>
             <ul className="ItemLists">
               {items.map((item) => {
-                return <li key={item.id}>{item.value}</li>;
+                return (
+                  <div>
+                    <li key={item.id} onClick={() => setDescription(true)}>
+                      {item.title}
+                    </li>
+                    <Modal
+                      open={description}
+                      onClose={() => setDescription(false)}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                    >
+                      <Box sx={style}>
+                        <Typography
+                          id="modal-modal-title"
+                          variant="h6"
+                          component="h2"
+                        >
+                          {item.title}
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          {item.description}
+                        </Typography>
+                      </Box>
+                    </Modal>
+                  </div>
+                );
               })}
             </ul>
           </div>
@@ -140,9 +170,18 @@ export default function JiraBoard() {
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 Description
               </Typography>
-              <textarea className="TextArea" />
+              <textarea
+                value={itemDescription}
+                onChange={(e) => setItemDescription(e.target.value)}
+                className="TextArea"
+              />
               <br />
-              <button className="SetButton" onClick={() => addItem()}>
+              <button
+                className="SetButton"
+                onClick={() => {
+                  addItem(), setIsAdd(false);
+                }}
+              >
                 Set
               </button>
             </Box>
