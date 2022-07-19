@@ -6,8 +6,8 @@ const ReactLogo = () => {
         className="ReactLogo"
         version="1.0"
         xmlns="http://www.w3.org/2000/svg"
-        width="50"
-        height="50"
+        width="30px"
+        height="30px"
         viewBox="0 0 607.000000 540.000000"
         preserveAspectRatio="xMidYMid meet"
       >

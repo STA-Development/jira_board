@@ -1,5 +1,6 @@
 import React from "react";
 import "./JiraBoard.css";
+import { useState } from "react";
 import Jira from "./IconComponents/jira";
 import Search from "./IconComponents/search";
 import Add from "./IconComponents/add";
@@ -11,9 +12,43 @@ import BoardSvg from "./IconComponents/board";
 import FeutureSvg from "./IconComponents/feutures";
 import SettingSvg from "./IconComponents/setting";
 import FeedBackSvg from "./IconComponents/feedBack";
-//import { fa-brands fa-jira} from "@fortawesome/free-solid-svg-icons";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import "./Modal/AddText.css";
+import Modal from "@mui/material/Modal";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 5,
+};
 
 export default function JiraBoard() {
+  const [IsAdd, setIsAdd] = useState(false);
+  const [newItem, setNewItem] = useState("");
+  const [itemDescription, setItemDescription] = useState("");
+  const [items, setItems] = useState<any[]>([]);
+  const [data, setData] = useState({});
+  const [description, setDescription] = useState(false);
+
+  const addItem = () => {
+    const item = {
+      id: Math.floor(Math.random() * 1000),
+      title: newItem,
+      description: itemDescription,
+    };
+    setItems((oldList) => [...oldList, item]);
+
+    setNewItem("");
+    console.log(items);
+  };
   return (
     <div className="Page">
       <div className="NavBarSide">
@@ -72,6 +107,38 @@ export default function JiraBoard() {
       <div className="Parent">
         <div className="child1">
           <p className="headerBoard">TO DO</p>
+          <div>
+            <ul className="ItemLists">
+              {items.map((item) => {
+                return (
+                  <div>
+                    <li key={item.id} onClick={() => setDescription(true)}>
+                      {item.title}
+                    </li>
+                    <Modal
+                      open={description}
+                      onClose={() => setDescription(false)}
+                      aria-labelledby="modal-modal-title"
+                      aria-describedby="modal-modal-description"
+                    >
+                      <Box sx={style}>
+                        <Typography
+                          id="modal-modal-title"
+                          variant="h6"
+                          component="h2"
+                        >
+                          {item.title}
+                        </Typography>
+                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                          {item.description}
+                        </Typography>
+                      </Box>
+                    </Modal>
+                  </div>
+                );
+              })}
+            </ul>
+          </div>
         </div>
         <div className="child2">
           <p>IN PROGRESS</p>
@@ -80,7 +147,45 @@ export default function JiraBoard() {
           <p>DONE</p>
         </div>
         <div className="child4">
-          <p className="add">+</p>
+          <button className="add" onClick={() => setIsAdd(true)}>
+            +
+          </button>
+          <Modal
+            open={IsAdd}
+            onClose={() => setIsAdd(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Title
+              </Typography>
+              <input
+                type="text"
+                name="name"
+                className="Text"
+                value={newItem}
+                onChange={(e) => setNewItem(e.target.value)}
+              />
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Description
+              </Typography>
+              <textarea
+                value={itemDescription}
+                onChange={(e) => setItemDescription(e.target.value)}
+                className="TextArea"
+              />
+              <br />
+              <button
+                className="SetButton"
+                onClick={() => {
+                  addItem(), setIsAdd(false);
+                }}
+              >
+                Set
+              </button>
+            </Box>
+          </Modal>
         </div>
       </div>
     </div>
