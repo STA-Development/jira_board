@@ -1,88 +1,110 @@
 import React from "react";
 import "./JiraBoard.css";
-import Jira from "./IconComponents/jira";
-import Search from "./IconComponents/search";
-import Add from "./IconComponents/add";
-import Bars from "./IconComponents/bars";
-import ReactLogo from "./IconComponents/ReactLogo";
-import Question from "./IconComponents/question";
-import Profile from "./IconComponents/profile";
-import BoardSvg from "./IconComponents/board";
-import FeutureSvg from "./IconComponents/feutures";
-import SettingSvg from "./IconComponents/setting";
-import FeedBackSvg from "./IconComponents/feedBack";
-//import { fa-brands fa-jira} from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from "react";
+import { Todo } from "./model";
+import { Description } from "./model2";
+import InputField from "./InputField";
+import Sidebar from "./SideBar/Sidebar";
+import Typography from "@mui/material/Typography";
+import "./Modal/AddText.css";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { TodoList } from "./TodoList";
 
-export default function JiraBoard() {
+const JiraBoard = () => {
+  const [IsAdd, setIsAdd] = useState(false); //will open the modal
+  const [description, setDescription] = useState(false); //will open description in item
+  const [todo, setTodo] = useState<string>(""); //for adding items
+  const [todos, setTodos] = useState<Todo[]>([]); //will create an array to have several items
+  const [inProgressTodos, setInProgressTodos] = useState<Todo[]>([]); //put items for inProgress div
+  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]); //put items for completed div
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const [itemDescription, setItemDescription] = useState<string>(""); //items for description
+
+  const handleAdd = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (todo) {
+      setTodos([
+        ...todos,
+        { id: Date.now(), todo, isDone: false, itemDescription },
+      ]);
+      setTodo("");
+    }
+  };
+
+  useEffect(() => {
+    console.log(todos);
+  }, [todos]);
+
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+    if (!destination) return;
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return;
+    let add,
+      active = todos,
+      progress = inProgressTodos,
+      complete = completedTodos;
+
+    if (source.droppableId === "TodosList") {
+      add = active[source.index];
+      active.splice(source.index, 1);
+    } else if (source.droppableId === "TodosRemove") {
+      add = progress[source.index];
+      progress.splice(source.index, 1);
+    } else {
+      add = complete[source.index];
+      complete.splice(source.index, 1);
+    }
+    ////////////////////////////////////////////////////////
+    if (destination.droppableId === "TodosList") {
+      active.splice(destination.index, 0, add);
+    } else if (destination.droppableId === "TodosRemove") {
+      progress.splice(destination.index, 0, add);
+    } else {
+      complete.splice(destination.index, 0, add);
+    }
+    setCompletedTodos(complete);
+    setTodos(active);
+    setInProgressTodos(progress);
+  };
+
   return (
     <div className="Page">
-      <div className="NavBarSide">
-        <div className="bar">
-          <div className="IconsPr">
-            <div className="Icons1">
-              <div>
-                <Jira />
-              </div>
-              <div>
-                <Search />
-              </div>
-              <div>
-                <Add />
-              </div>
-            </div>
-            <div className="Icons2">
-              <div>
-                <Bars />
-              </div>
-              <div>
-                <Question />
-              </div>
-              <div>
-                <Profile />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="EditLogos">
-          <div className="EditLogo">
-            <ReactLogo />
-            <p className="JiraLogo">
-              Nuclus <br /> Software Project
-            </p>
-          </div>
-          <div className="EditLogo2">
-            <BoardSvg />
-            <p>Board</p>
-          </div>
-          <div className="EditLogo3">
-            <FeutureSvg />
-            <p className="Boarder">Features</p>
-          </div>
-          <div className="EditLogo4">
-            <SettingSvg />
-            <p>Settings</p>
-          </div>
-          <div className="EditLogo5">
-            <FeedBackSvg />
-            <p className="FeedBack">Give Feedback</p>
-          </div>
-        </div>
-      </div>
+      <Sidebar />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <TodoList
+          todos={todos}
+          setTodos={setTodos}
+          IsAdd={IsAdd}
+          setIsAdd={setIsAdd}
+          inProgressTodos={inProgressTodos}
+          setInProgressTodos={setInProgressTodos}
+          completedTodos={completedTodos}
+          setCompletedTodos={setCompletedTodos}
+          itemDescription={itemDescription}
+          setItemDescription={setItemDescription}
+          description={description}
+          setDescription={setDescription}
+        />
 
-      <div className="Parent">
-        <div className="child1">
-          <p className="headerBoard">TO DO</p>
-        </div>
-        <div className="child2">
-          <p>IN PROGRESS</p>
-        </div>
-        <div className="child3">
-          <p>DONE</p>
-        </div>
-        <div className="child4">
-          <p className="add">+</p>
-        </div>
-      </div>
+        <InputField
+          todo={todo}
+          setTodo={setTodo}
+          description={description}
+          setDescription={setDescription}
+          IsAdd={IsAdd}
+          setIsAdd={setIsAdd}
+          itemDescription={itemDescription}
+          setItemDescription={setItemDescription}
+          handleAdd={handleAdd}
+        />
+      </DragDropContext>
     </div>
   );
-}
+};
+
+export default JiraBoard;

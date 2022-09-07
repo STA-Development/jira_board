@@ -1,0 +1,111 @@
+
+    .container {
+        width: 90%;
+        display: flex;
+        margin-top:10%;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap:30px
+      }
+      
+      .todos {
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        width: 400px;
+        padding: 40px;
+        background-color:hsla(206, 100%, 87%, 0.25);
+       
+      }
+      
+      .dragactive {
+        background-color: rgb(0, 221, 236);
+      }
+      
+      .dragcomplete {
+        background-color: rgb(255, 38, 0);
+      }
+      
+      .remove {
+        background-color: 
+        #fee27f;
+      }
+      .remove2 {
+    background-color:  
+ #f4f5f7;
+      }
+      
+      .heading {
+        font-size: 20px;
+        color: black;
+        white-space: nowrap;
+      }
+      
+      .todos__single {
+        display: flex;
+        border-radius: 5px;
+        padding: 30px;
+        margin-top: 20px;
+        background-color: white;
+        
+        width:90%
+      }
+      
+      .drag {
+        box-shadow: 0 0 20px black;
+      }
+      
+      .todos__single:hover {
+        box-shadow: 0 0 5px black;
+       
+      }
+      
+      .todos__single--text {
+        flex: 1;
+        padding: 5px;
+        border: none;
+        font-size: 20px;
+      }
+      
+      .todos__single--text:focus {
+        outline: none;
+      }
+      
+      .icon {
+        margin-left: 10px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      .add {
+        font-size: 30px;
+        border:none;
+        background-color:hsla(206, 100%, 87%, 0.25);
+        width:50px;
+        height:50px;
+    }
+    
+    .add:hover{
+           background-color:hsla(50, 100%, 100%, 0.25);
+    }
+      
+      @media (max-width: 1100px) {
+        .todos {
+          width: 45%;
+        }
+      }
+      
+      @media (max-width: 700px) {
+        .input {
+          width: 95%;
+        }
+        .container {
+          width: 95%;
+          flex-direction: column;
+        }
+        .todos {
+          width: 95%;
+          margin-bottom: 10px;
+        }
+      }
+    
+    
