@@ -5,18 +5,66 @@
     grid-gap:3%;
 }
 
-
+.JiraHeader {
+    font-size: 30px;
+}
 .NavBarSide{
     background-color: #eff3f3;
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 20% 20%  ;
     grid-gap: 25px;
+    
+
 }
 .bar {
     background: #0748a6;
 }
+.Parent {
+    display: grid;
+    gap:10px;
+    grid-auto-flow: column;
+    grid-gap: 15px;
+    justify-content: right;
+    grid-template-columns: 30% 30% 30% ;
+    height: 100vh;
+    
+}
+.child {
+    padding-left: 20px;
+    padding-bottom: 20px;
+    background-color: #f4f5f7;
+    
+}
+.child1 {
+    padding-left: 20px;
+    background-color:hsla(206, 100%, 87%, 0.25);
+}
+.child2 {
+    padding-left: 20px;
+    background-color: 
+    #fee27f;
+}
+.child3{
+    
+    padding-left: 20px;
+   background-color:  
+   #f4f5f7;
+}
+.child4{
+   
+    width: 50px;
+    height: 50px;
+    
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    background-color:hsla(206, 100%, 87%, 0.25)
+}
 
+.add {
+    font-size: 15px;
+}
 .p{
     font-weight: bold;
     font-size: 40px;
@@ -33,12 +81,11 @@
     }
 
     .Icons1 {
+        
         display: flex;
         flex-direction: column;
         align-items: center;
         gap:10px;
-        position : relative;
-        margin-top: 3vh;
       }
     .Icons2 {
         
@@ -46,10 +93,8 @@
         flex-direction: column;
         align-items: center;
         gap:10px;
-        align-items: space-between; 
-        position : relative;
-        margin-top: 74.5vh;
-       
+        position: relative;
+        top:70vh;
         
     }
  
@@ -86,6 +131,9 @@
 .Board {
     font-size: 22px;
     padding: 10px;
+   
+
+ 
 }
 .EditLogo3{
      display: flex;
