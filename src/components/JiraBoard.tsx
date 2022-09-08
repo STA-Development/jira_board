@@ -1,193 +1,110 @@
 import React from "react";
 import "./JiraBoard.css";
-import { useState } from "react";
-import Jira from "./IconComponents/jira";
-import Search from "./IconComponents/search";
-import Add from "./IconComponents/add";
-import Bars from "./IconComponents/bars";
-import ReactLogo from "./IconComponents/ReactLogo";
-import Question from "./IconComponents/question";
-import Profile from "./IconComponents/profile";
-import BoardSvg from "./IconComponents/board";
-import FeutureSvg from "./IconComponents/feutures";
-import SettingSvg from "./IconComponents/setting";
-import FeedBackSvg from "./IconComponents/feedBack";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import { useState, useEffect } from "react";
+import { Todo } from "./model";
+import { Description } from "./model2";
+import InputField from "./InputField";
+import Sidebar from "./SideBar/Sidebar";
 import Typography from "@mui/material/Typography";
 import "./Modal/AddText.css";
-import Modal from "@mui/material/Modal";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { TodoList } from "./TodoList";
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 500,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 5,
-};
+const JiraBoard = () => {
+  const [IsAdd, setIsAdd] = useState(false); //will open the modal
+  const [description, setDescription] = useState(false); //will open description in item
+  const [todo, setTodo] = useState<string>(""); //for adding items
+  const [todos, setTodos] = useState<Todo[]>([]); //will create an array to have several items
+  const [inProgressTodos, setInProgressTodos] = useState<Todo[]>([]); //put items for inProgress div
+  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]); //put items for completed div
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const [itemDescription, setItemDescription] = useState<string>(""); //items for description
 
-export default function JiraBoard() {
-  const [IsAdd, setIsAdd] = useState(false);
-  const [newItem, setNewItem] = useState("");
-  const [itemDescription, setItemDescription] = useState("");
-  const [items, setItems] = useState<any[]>([]);
-  const [data, setData] = useState({});
-  const [description, setDescription] = useState(false);
-
-  const addItem = () => {
-    const item = {
-      id: Math.floor(Math.random() * 1000),
-      title: newItem,
-      description: itemDescription,
-    };
-    setItems((oldList) => [...oldList, item]);
-
-    setNewItem("");
-    console.log(items);
+  const handleAdd = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (todo) {
+      setTodos([
+        ...todos,
+        { id: Date.now(), todo, isDone: false, itemDescription },
+      ]);
+      setTodo("");
+    }
   };
+
+  useEffect(() => {
+    console.log(todos);
+  }, [todos]);
+
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination } = result;
+    if (!destination) return;
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return;
+    let add,
+      active = todos,
+      progress = inProgressTodos,
+      complete = completedTodos;
+
+    if (source.droppableId === "TodosList") {
+      add = active[source.index];
+      active.splice(source.index, 1);
+    } else if (source.droppableId === "TodosRemove") {
+      add = progress[source.index];
+      progress.splice(source.index, 1);
+    } else {
+      add = complete[source.index];
+      complete.splice(source.index, 1);
+    }
+    ////////////////////////////////////////////////////////
+    if (destination.droppableId === "TodosList") {
+      active.splice(destination.index, 0, add);
+    } else if (destination.droppableId === "TodosRemove") {
+      progress.splice(destination.index, 0, add);
+    } else {
+      complete.splice(destination.index, 0, add);
+    }
+    setCompletedTodos(complete);
+    setTodos(active);
+    setInProgressTodos(progress);
+  };
+
   return (
     <div className="Page">
-      <div className="NavBarSide">
-        <div className="bar">
-          <div className="IconsPr">
-            <div className="Icons1">
-              <div>
-                <Jira />
-              </div>
-              <div>
-                <Search />
-              </div>
-              <div>
-                <Add />
-              </div>
-            </div>
-            <div className="Icons2">
-              <div>
-                <Bars />
-              </div>
-              <div>
-                <Question />
-              </div>
-              <div>
-                <Profile />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="EditLogos">
-          <div className="EditLogo">
-            <ReactLogo />
-            <p className="JiraLogo">
-              Nuclus <br /> Software Project
-            </p>
-          </div>
-          <div className="EditLogo2">
-            <BoardSvg />
-            <p>Board</p>
-          </div>
-          <div className="EditLogo3">
-            <FeutureSvg />
-            <p className="Boarder">Features</p>
-          </div>
-          <div className="EditLogo4">
-            <SettingSvg />
-            <p>Settings</p>
-          </div>
-          <div className="EditLogo5">
-            <FeedBackSvg />
-            <p className="FeedBack">Give Feedback</p>
-          </div>
-        </div>
-      </div>
+      <Sidebar />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <TodoList
+          todos={todos}
+          setTodos={setTodos}
+          IsAdd={IsAdd}
+          setIsAdd={setIsAdd}
+          inProgressTodos={inProgressTodos}
+          setInProgressTodos={setInProgressTodos}
+          completedTodos={completedTodos}
+          setCompletedTodos={setCompletedTodos}
+          itemDescription={itemDescription}
+          setItemDescription={setItemDescription}
+          description={description}
+          setDescription={setDescription}
+        />
 
-      <div className="Parent">
-        <div className="child1">
-          <p className="headerBoard">TO DO</p>
-          <div>
-            <ul className="ItemLists">
-              {items.map((item) => {
-                return (
-                  <div>
-                    <li key={item.id} onClick={() => setDescription(true)}>
-                      {item.title}
-                    </li>
-                    <Modal
-                      open={description}
-                      onClose={() => setDescription(false)}
-                      aria-labelledby="modal-modal-title"
-                      aria-describedby="modal-modal-description"
-                    >
-                      <Box sx={style}>
-                        <Typography
-                          id="modal-modal-title"
-                          variant="h6"
-                          component="h2"
-                        >
-                          {item.title}
-                        </Typography>
-                        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                          {item.description}
-                        </Typography>
-                      </Box>
-                    </Modal>
-                  </div>
-                );
-              })}
-            </ul>
-          </div>
-        </div>
-        <div className="child2">
-          <p>IN PROGRESS</p>
-        </div>
-        <div className="child3">
-          <p>DONE</p>
-        </div>
-        <div className="child4">
-          <button className="add" onClick={() => setIsAdd(true)}>
-            +
-          </button>
-          <Modal
-            open={IsAdd}
-            onClose={() => setIsAdd(false)}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                Title
-              </Typography>
-              <input
-                type="text"
-                name="name"
-                className="Text"
-                value={newItem}
-                onChange={(e) => setNewItem(e.target.value)}
-              />
-              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                Description
-              </Typography>
-              <textarea
-                value={itemDescription}
-                onChange={(e) => setItemDescription(e.target.value)}
-                className="TextArea"
-              />
-              <br />
-              <button
-                className="SetButton"
-                onClick={() => {
-                  addItem(), setIsAdd(false);
-                }}
-              >
-                Set
-              </button>
-            </Box>
-          </Modal>
-        </div>
-      </div>
+        <InputField
+          todo={todo}
+          setTodo={setTodo}
+          description={description}
+          setDescription={setDescription}
+          IsAdd={IsAdd}
+          setIsAdd={setIsAdd}
+          itemDescription={itemDescription}
+          setItemDescription={setItemDescription}
+          handleAdd={handleAdd}
+        />
+      </DragDropContext>
     </div>
   );
-}
+};
+
+export default JiraBoard;
